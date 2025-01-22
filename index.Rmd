@@ -1,0 +1,134 @@
+---
+title: "Carolina Climb Everest Challenge"
+date: "Last Updated: `r format(Sys.Date(), '%B %d, %Y')`"
+output:
+  html_document:
+    theme: cerulean
+    highlight: tango
+    toc: false
+    toc_depth: 2
+    toc_float: true
+    css: styles.css  # Reference to the custom CSS file
+  pdf_document: 
+    highlight: tango
+    toc: true
+    toc_depth: 2
+    toc_float: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(dplyr)
+library(knitr)
+library(kableExtra)
+```
+
+Welcome to the Carolina Climb Everest Challenge. Can you take down over 11000 feet of climbing in one semester? If you're ready to get started, go submit your first climb!
+
+## How to Sign Up
+
+Ready to join the challenge? [Click here to log a climb!](https://forms.office.com/Pages/ResponsePage.aspx?id=T9WzWMkW00KvCB_KvQlWZpdqpBijr_pOhAYAv-Ww5RFUODdVVjlaU1pFWU9YVkpNUUxTRUxaNTM4OC4u) Simply log your climbs, and see how you stack up against other competitors. The more you climb, the higher you'll rank!
+
+---
+
+\
+
+
+```{r, include=FALSE}
+# Load necessary libraries
+library(dplyr)
+library(knitr)
+library(readr)
+
+df1 <- read_csv("Carolina Climbing Challenge 2024(Sheet1).csv")
+
+# Sample data, replace this with your actual dataset
+df <- data.frame(
+  Id = 1,
+  Start_time = "9/3/24 15:45",
+  Completion_time = "9/3/24 15:46",
+  Email = "anonymous",
+  Name = "",
+  First_and_Last_Name = "Jake Flaherty",
+  PID = 730545177,
+  Top_Rope_Routes = 5,
+  Boulders = 5,
+  Wall = "Fetzer",
+  Climb_Date = "9/3/24"
+)
+
+# Calculate total feet climbed
+df <- df1 %>%
+  mutate(
+    `Total_Feet_Climbed` = sum((Top_Rope_Routes * 30) + (Boulders * 12), na.rm = TRUE))
+
+compMTC <- df %>%
+  group_by(PID) %>%
+  summarise(
+    `Full Name` = first(First_and_Last_Name),  # Assuming names are consistent across rows for each PID
+    `Top Rope Routes Climbed` = sum(Top_Rope_Routes, na.rm = TRUE),
+    `Boulders Climbed` = sum(Boulders, na.rm = TRUE),
+    `Total Distance (ft)` = sum((Top_Rope_Routes * 30) + (Boulders * 12), na.rm = TRUE)
+  ) %>%
+  select(`Full Name`, `Top Rope Routes Climbed`, `Boulders Climbed`, `Total Distance (ft)`) %>%
+  arrange(desc(`Total Distance (ft)`))
+
+# Filter those above 10,000 feet
+above_10k <- compMTC %>%
+  filter(`Total Distance (ft)` > 5495) 
+
+
+```
+
+## 2025 Everest Climbers
+
+```{r, echo=FALSE}
+# Display the table
+kable(above_10k) %>%
+  kable_styling(bootstrap_options = c("striped", "hover", "condensed"), full_width = TRUE)
+```
+
+---
+
+\
+
+```{r, include=FALSE}
+
+competitors <- df %>%
+  group_by(PID) %>%
+  summarise(
+    `Full Name` = first(First_and_Last_Name),  # Assuming names are consistent across rows for each PID
+    `Top Rope Routes Climbed` = sum(Top_Rope_Routes, na.rm = TRUE),
+    `Boulders Climbed` = sum(Boulders, na.rm = TRUE),
+    `Total Distance (ft)` = sum((Top_Rope_Routes * 30) + (Boulders * 12), na.rm = TRUE)
+  ) %>%
+  select(`Full Name`, `Top Rope Routes Climbed`, `Boulders Climbed`, `Total Distance (ft)`) %>%
+  arrange(desc(`Total Distance (ft)`))
+
+#Competitors
+competitors2 <- df %>%
+  distinct(PID, .keep_all = TRUE) %>%
+  mutate(Total_Feet_Climbed = (Top_Rope_Routes * 30) + (Boulders * 12)) %>%
+  select(First_and_Last_Name, Top_Rope_Routes, Boulders, Total_Feet_Climbed) %>%
+  rename(
+    `Full Name` = First_and_Last_Name,
+    `Top Rope Routes Climbed` = Top_Rope_Routes,
+    `Boulders Climbed` = Boulders,
+    `Total Distance (ft)` = `Total_Feet_Climbed`
+  ) %>%
+  arrange(desc(`Total Distance (ft)`))
+```
+
+## Competitors
+
+```{r, echo=FALSE}
+kable(competitors) %>%
+  kable_styling(bootstrap_options = c("hover", "condensed"), full_width = TRUE) #%>%
+#  row_spec(1:1, background = "#FFD700") %>%  
+#  row_spec(2:2, background = "#C0C0C0") %>%
+#  row_spec(3:3, background = "#CD7F32") %>%
+#  row_spec(4:15, background = "#ebebeb")
+
+##Add back later
+```
+
