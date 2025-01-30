@@ -2,3 +2,11 @@
   font-size: 30px; /* Adjust this value as needed */
   font-weight: bold; /* Optional: Make the caption bold */
 }
+
+/* Ensure image does not overflow the screen width */
+#banner {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}

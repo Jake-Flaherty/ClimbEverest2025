@@ -1,6 +1,7 @@
+<div style="text-align: center; margin-bottom: 20px;">
+  <img src="Everest-Summit-Pano-reduced.jpg" id="banner" alt="Carolina Climb Banner" style="width: 100%; height: auto;">
+</div>
 ---
-title: "Carolina Climb Everest Challenge"
-date: "Last Updated: `r format(Sys.Date(), '%B %d, %Y')`"
 output:
   html_document:
     theme: cerulean
@@ -9,11 +10,11 @@ output:
     toc_depth: 2
     toc_float: true
     css: styles.css  # Reference to the custom CSS file
-  pdf_document: 
-    highlight: tango
-    toc: true
-    toc_depth: 2
-    toc_float: true
+pdf_document: 
+  highlight: tango
+  toc: true
+  toc_depth: 2
+  toc_float: true
 ---
 
 ```{r setup, include=FALSE}
@@ -23,7 +24,12 @@ library(knitr)
 library(kableExtra)
 ```
 
+# Carolina Climb Everest Challenge
+
+### Last Updated: `r format(Sys.Date(), '%B %d, %Y')`
+
 Welcome to the Carolina Climb Everest Challenge. Can you take down over 11000 feet of climbing in one semester? If you're ready to get started, go submit your first climb!
+
 
 ## How to Sign Up
 
